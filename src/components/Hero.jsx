@@ -26,30 +26,35 @@ const PageContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #000;  /* Full page black background */
+  background-color: #000; /* Full page black background */
 `;
 
 const HeroContent = styled.div`
   text-align: center;
-  width: 600px;
-  height: 400px;
+  width: 85vw;
+  height: 40vh;
   padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 10px 5px rgba(0, 223, 154, 0.7); /* Green halo around the box */
   border-radius: 10px;
   background-color: rgba(0, 0, 0, 0.3); /* Transparent black background */
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 0 20px 10px rgba(0, 223, 154, 0.9); /* Larger green halo on hover */
+  }
 `;
 
 const MottoText = styled.h1`
   font-size: 2.5rem;
   font-weight: bold;
-  color: #fff;  /* White text */
+  color: #fff; /* White text */
   margin-bottom: 1rem;
 `;
 
 const SubText = styled.p`
   font-size: 1.2rem;
   font-weight: 300;
-  color: #fff;  /* White text */
+  color: #fff; /* White text */
   margin-bottom: 2rem;
 `;
 
@@ -58,20 +63,22 @@ const GetStartedButton = styled.button`
   font-size: 1.2rem;
   font-weight: bold;
   color: #fff;
-  background-color: #00df9a;  /* Green background */
-  border: 2px solid #00df9a;  /* Green border */
+  background-color: #00df9a; /* Green background */
+  border: 2px solid #00df9a; /* Green border */
   border-radius: 8px;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 
   &:hover {
     transform: scale(1.1);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    background-color: #00b37a;  /* Darker green background on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), 
+                0 0 10px 5px rgba(0, 223, 154, 0.7); /* Green halo glow */
+    background-color: #00b37a; /* Darker green background on hover */
   }
 
   &:focus {
     outline: none;
+    box-shadow: 0 0 10px 5px rgba(0, 223, 154, 0.7); /* Green halo on focus */
   }
 `;
 
