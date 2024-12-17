@@ -1,20 +1,18 @@
-import React from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";  // Import useNavigate
-import logo from "../assets/logo.jpeg";  // Your logo image
+import React from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import logo from '../assets/logo.jpeg'; // Your logo image
 
-export default function Header() {
-  const navigate = useNavigate();  // Initialize useNavigate hook
+const Header = ({ onAboutClick }) => {  // Accept onAboutClick prop
+  const navigate = useNavigate();
 
-  // Function to navigate to the Login page
   const handleLoginClick = () => {
-    navigate("/login");  // Navigate to the Login page
+    navigate("/login"); // Navigate to the Login page
   };
 
   return (
     <HeaderContainer>
       <Logo>
-        {/* Use correct path depending on where your image is stored */}
         <img src={logo} alt="Summarizer Logo" />
       </Logo>
       <NavContainer>
@@ -23,21 +21,23 @@ export default function Header() {
             <Button>Home</Button>
           </NavLink>
           <NavLink>
-            <Button>About</Button>
+            <Button onClick={onAboutClick}>About</Button>  {/* Trigger scroll */}
           </NavLink>
           <NavLink>
             <Button>Contact</Button>
           </NavLink>
         </NavLinksCenter>
         <NavLinkRight>
-          <Button onClick={handleLoginClick}>Login</Button> {/* Add onClick handler */}
+          <Button onClick={handleLoginClick}>Login</Button>
         </NavLinkRight>
       </NavContainer>
     </HeaderContainer>
   );
-}
+};
 
-// Styled Components
+export default Header;
+
+// Styled Components (no change)
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -45,14 +45,19 @@ const HeaderContainer = styled.header`
   align-items: center;
   padding: 1rem 2rem;
   background-color: #000;  /* Black background */
-  color: #fff;  /* White text color */
+  color: #fff;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);  /* Slight shadow for contrast */
+  position: fixed;  /* Keep the header fixed at the top */
+  top: 0;  /* Position at the top of the screen */
+  left: 0;
+  width: 94vw;
+  z-index: 1000;  /* Ensure it's above other content */
 `;
 
 const Logo = styled.div`
   img {
-    width: 80px;  /* Adjusted width of the logo */
-    height: auto;  /* Maintain aspect ratio */
+    width: 60px;
+    height: auto;
   }
 `;
 
@@ -71,7 +76,7 @@ const NavLinksCenter = styled.ul`
   gap: 1.5rem;
   margin: 0;
   padding: 0;
-  flex-grow: 1;  /* Takes up the remaining space to push the login button to the right */
+  flex-grow: 1;
 `;
 
 const NavLink = styled.li``;
@@ -84,11 +89,11 @@ const NavLinkRight = styled.ul`
 
 const Button = styled.button`
   background-color: transparent;
-  color: #fff;  /* White text color for buttons */
+  color: #fff;
   font-size: 1rem;
   font-weight: bold;
   padding: 0.5rem 1.5rem;
-  border: 2px solid #00df9a;  /* Green border for buttons */
+  border: 0px solid #00df9a;
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -96,13 +101,14 @@ const Button = styled.button`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 
   &:hover {
-    background-color: #00df9a;  /* Green background on hover */
-    color: #000;  /* Black text color when hovered */
+    background-color: #00df9a;
+    color: #000;
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   }
 
   &:focus {
-    outline: none;  /* Remove focus outline */
+    outline: none;
+    box-shadow: none;
   }
 `;
