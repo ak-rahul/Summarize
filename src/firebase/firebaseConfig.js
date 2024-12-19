@@ -1,28 +1,43 @@
-import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, signInWithCredential } from "firebase/auth";
-import { getAnalytics } from "firebase/analytics"; // Import for analytics (optional)
+import { initializeApp, getApps } from 'firebase/app';
+import { getAuth, GoogleAuthProvider, signInWithRedirect, signInWithEmailAndPassword as firebaseSignInWithEmailAndPassword } from 'firebase/auth';
 
+// Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDTy6tdH1wU4dbkFCdI75UYffNcgpfTA74",
-  authDomain: "research-paper-summarize-bb74c.firebaseapp.com",
-  projectId: "research-paper-summarize-bb74c",
-  storageBucket: "research-paper-summarize-bb74c.firebasestorage.app",
-  messagingSenderId: "736022588925",
-  appId: "1:736022588925:web:005ab07b1f8b135129fd94",
-  measurementId: "G-ESF7KN45EQ"
+  apiKey: 'AIzaSyDZYjRVEWny-ikQEzbymF7ca6N0ZTpB2CA',
+  authDomain: 'summarize-91155.firebaseapp.com',
+  projectId: 'summarize-91155',
+  storageBucket: 'summarize-91155.appspot.com',
+  messagingSenderId: '1036901722721',
+  appId: '1:1036901722721:web:695b9d0d6b7f0db4a1c9b1',
+  measurementId: 'G-JZY1YB6Q3X',
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);  // Optional, only if you're using analytics
+// Initialize Firebase (if it hasn't been initialized already)
+if (!getApps().length) {
+  initializeApp(firebaseConfig);
+}
 
-// Export authentication and Google Sign-In provider
-const auth = getAuth(app);
-const googleProvider = new GoogleAuthProvider();
+// Firebase Authentication
+const auth = getAuth();
 
-// Google sign-in method
-const signInWithGoogle = () => {
-  return signInWithPopup(auth, googleProvider);
+// Google Sign-In
+const signInWithGoogle = async () => {
+  const provider = new GoogleAuthProvider();
+  try {
+    await signInWithRedirect(auth, provider);
+  } catch (error) {
+    throw error;
+  }
 };
 
-export { auth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithCredential, googleProvider, signInWithGoogle };
+// Email/Password Sign-In
+const signInWithEmailAndPassword = async (email, password) => {
+  try {
+    await firebaseSignInWithEmailAndPassword(auth, email, password);
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Exporting auth and methods for use in other files
+export { auth, signInWithGoogle, signInWithEmailAndPassword };

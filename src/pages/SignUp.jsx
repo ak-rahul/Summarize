@@ -1,34 +1,47 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Correctly import the eye icons
-import { FaArrowLeft } from 'react-icons/fa'; // Back arrow icon
+import { FaEye, FaEyeSlash, FaArrowLeft } from 'react-icons/fa'; // Import icons
 import { useNavigate } from 'react-router-dom'; // Import useNavigate hook for routing
+import { createUserWithEmailAndPassword } from "firebase/auth"; // Firebase auth method
+import { auth } from "../firebase/firebaseConfig"; // Import Firebase auth instance
+import { FaSpinner } from 'react-icons/fa'; // Import spinner icon
 
 const SignUp = () => {
-  const [name, setName] = useState(''); // State for name
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
-  const [passwordVisible, setPasswordVisible] = useState(false); // State to toggle password visibility
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [loading, setLoading] = useState(false); // State to track loading
   const navigate = useNavigate(); // Hook for navigation
 
-  // Handle back button click to navigate to the landing page
+  // Handle back button click to navigate to the login page
   const handleBack = () => {
-    navigate('/login'); // Redirects to the login page
+    navigate('/login');
   };
 
-  // Handle sign up form submission
-  const handleSignUpSubmit = (e) => {
+  // Handle sign-up form submission
+  const handleSignUpSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
     }
 
-    // Add logic to handle sign up (e.g., Firebase Auth or your backend)
-    console.log('Sign Up submitted with name:', name, 'email:', email);
-    // navigate('/dashboard'); // Redirect to dashboard after successful sign-up
+    setLoading(true); // Set loading to true when form is submitted
+
+    try {
+      // Create a new user with email and password in Firebase
+      await createUserWithEmailAndPassword(auth, email, password);
+      console.log('User created successfully');
+      navigate('/dashboard'); // Redirect to dashboard after successful sign-up
+    } catch (err) {
+      setError(err.message); // Display error message
+      console.error('Error creating user:', err);
+    } finally {
+      setLoading(false); // Set loading to false after completion
+    }
   };
 
   // Toggle password visibility
@@ -82,7 +95,9 @@ const SignUp = () => {
               {passwordVisible ? <FaEyeSlash /> : <FaEye />}
             </EyeIcon>
           </PasswordInputContainer>
-          <SignUpButton type="submit">Sign Up</SignUpButton>
+          <SignUpButton type="submit" disabled={loading}>
+            {loading ? <FaSpinner className="spinner" /> : 'Sign Up'}
+          </SignUpButton>
         </form>
 
         {error && <ErrorText>{error}</ErrorText>}
@@ -96,10 +111,6 @@ const SignUp = () => {
 };
 
 // Styled Components
-const greenHalo = `0 0 10px 5px rgba(0, 223, 154, 0.7)`;
-const greenHaloHover = `0 0 20px 10px rgba(0, 223, 154, 0.9)`;
-const greenHaloFocus = `0 0 8px rgba(0, 223, 154, 0.7)`;
-
 const SignUpPageContainer = styled.div`
   background-color: #000;
   display: flex;
@@ -118,10 +129,10 @@ const SignUpFormContainer = styled.div`
   max-width: 400px;
   text-align: center;
   position: relative;
-  box-shadow: ${greenHalo};
+  box-shadow: 0 0 10px 5px rgba(0, 223, 154, 0.7);
 
   &:hover {
-    box-shadow: ${greenHaloHover};
+    box-shadow: 0 0 20px 10px rgba(0, 223, 154, 0.9);
   }
 `;
 
@@ -161,7 +172,7 @@ const Input = styled.input`
   &:focus {
     outline: none;
     background-color: #555;
-    box-shadow: ${greenHaloFocus};
+    box-shadow: 0 0 8px rgba(0, 223, 154, 0.7);
   }
 `;
 
@@ -186,7 +197,7 @@ const PasswordInput = styled.input`
   &:focus {
     outline: none;
     background-color: #555;
-    box-shadow: ${greenHaloFocus};
+    box-shadow: 0 0 8px rgba(0, 223, 154, 0.7);
   }
 `;
 
@@ -223,6 +234,24 @@ const SignUpButton = styled.button`
 
   &:focus {
     outline: none;
+  }
+
+  &:disabled {
+    background-color: #666;
+    cursor: not-allowed;
+  }
+
+  .spinner {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 `;
 

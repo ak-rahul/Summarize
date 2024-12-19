@@ -1,41 +1,53 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { FaEye, FaEyeSlash, FaArrowLeft } from 'react-icons/fa'; // Import eye and back arrow icons
-import { FcGoogle } from 'react-icons/fc'; // Google icon
-import { signInWithGoogle } from '../firebase/firebaseConfig'; // Import the Google sign-in method
-import { useNavigate } from 'react-router-dom'; // Import useNavigate hook for routing
+import { FaEye, FaEyeSlash, FaArrowLeft } from 'react-icons/fa';
+import { FcGoogle } from 'react-icons/fc';
+import { signInWithGoogle, signInWithEmailAndPassword } from '../firebase/firebaseConfig';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [passwordVisible, setPasswordVisible] = useState(false); // State to toggle password visibility
-  const navigate = useNavigate(); // Hook for navigation
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  // Handle Google login
   const handleGoogleLogin = async () => {
     try {
       await signInWithGoogle();
       console.log('Google login successful');
-      // Redirect to the home page or dashboard
+      navigate('/dashboard');
     } catch (err) {
       setError(err.message);
     }
   };
 
-  // Toggle password visibility
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      await signInWithEmailAndPassword(email, password);
+      console.log('User logged in successfully');
+      navigate('/dashboard');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
 
-  // Handle back button click to navigate to the landing page
   const handleBack = () => {
-    navigate('/'); // Redirects to the landing page
+    navigate('/');
   };
 
-  // Handle sign up redirection
   const handleSignUp = () => {
-    navigate('/signup'); // Redirects to the Sign Up page
+    navigate('/signup');
   };
 
   return (
@@ -45,7 +57,7 @@ const Login = () => {
           <FaArrowLeft /> Back
         </BackButton>
         <h2>Welcome Back!</h2>
-        <form>
+        <form onSubmit={handleLogin}>
           <Input
             type="email"
             placeholder="Email Address"
@@ -55,7 +67,7 @@ const Login = () => {
           />
           <PasswordInputContainer>
             <PasswordInput
-              type={passwordVisible ? 'text' : 'password'} // Toggle input type based on state
+              type={passwordVisible ? 'text' : 'password'}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -65,24 +77,23 @@ const Login = () => {
               {passwordVisible ? <FaEyeSlash /> : <FaEye />}
             </EyeIcon>
           </PasswordInputContainer>
-          <LoginButton type="submit">Log In</LoginButton>
+          <LoginButton type="submit" disabled={loading}>
+            {loading ? 'Logging in...' : 'Log In'}
+          </LoginButton>
         </form>
 
-        {/* OR with horizontal lines */}
         <OrContainer>
           <hr />
           <span>OR</span>
           <hr />
         </OrContainer>
 
-        {/* Google Login Button */}
         <GoogleButton onClick={handleGoogleLogin}>
           <FcGoogle /> Log in with Google
         </GoogleButton>
 
         {error && <ErrorText>{error}</ErrorText>}
 
-        {/* Sign Up Link */}
         <SignUpLink>
           Don't have an account? <span onClick={handleSignUp}>Sign Up</span>
         </SignUpLink>
@@ -91,12 +102,10 @@ const Login = () => {
   );
 };
 
-// Green halo constants
+// Styled Components
 const greenHalo = `0 0 10px 5px rgba(0, 223, 154, 0.7)`;
 const greenHaloHover = `0 0 20px 10px rgba(0, 223, 154, 0.9)`;
 const greenHaloFocus = `0 0 8px rgba(0, 223, 154, 0.7)`;
-
-// Styled Components
 
 const LoginPageContainer = styled.div`
   background-color: #000;
@@ -222,6 +231,11 @@ const LoginButton = styled.button`
   &:focus {
     outline: none;
   }
+
+  &:disabled {
+    background-color: #666;
+    cursor: not-allowed;
+  }
 `;
 
 const OrContainer = styled.div`
@@ -241,7 +255,7 @@ const OrContainer = styled.div`
 
   span {
     color: #fff;
-    font-size: 0.7rem;  /* Smaller font size for OR */
+    font-size: 0.7rem;
     font-weight: bold;
   }
 `;
@@ -250,7 +264,7 @@ const GoogleButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 106%;  /* Set width to 100% to match the input fields */
+  width: 106%;
   padding: 0.8rem;
   background-color: #fff;
   color: #000;
