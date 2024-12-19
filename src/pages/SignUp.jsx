@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { FaEye, FaEyeSlash, FaArrowLeft } from 'react-icons/fa'; // Import icons
-import { useNavigate } from 'react-router-dom'; // Import useNavigate hook for routing
-import { createUserWithEmailAndPassword } from "firebase/auth"; // Firebase auth method
-import { auth } from "../firebase/firebaseConfig"; // Import Firebase auth instance
-import { FaSpinner } from 'react-icons/fa'; // Import spinner icon
+import { FaEye, FaEyeSlash, FaArrowLeft } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase/firebaseConfig";
+import { doc, setDoc } from "firebase/firestore"; // Firestore methods
+import { db } from "../firebase/firebaseConfig"; // Import Firestore instance
+import { FaSpinner } from 'react-icons/fa';
 
 const SignUp = () => {
   const [name, setName] = useState('');
@@ -13,15 +15,13 @@ const SignUp = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [loading, setLoading] = useState(false); // State to track loading
-  const navigate = useNavigate(); // Hook for navigation
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  // Handle back button click to navigate to the login page
   const handleBack = () => {
     navigate('/login');
   };
 
-  // Handle sign-up form submission
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
@@ -29,22 +29,30 @@ const SignUp = () => {
       return;
     }
 
-    setLoading(true); // Set loading to true when form is submitted
+    setLoading(true);
 
     try {
-      // Create a new user with email and password in Firebase
-      await createUserWithEmailAndPassword(auth, email, password);
-      console.log('User created successfully');
+      // Create a new user with email and password in Firebase Auth
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Save user details in Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        name: name,
+        email: email,
+        createdAt: new Date().toISOString(),
+      });
+
+      console.log('User created successfully and details saved to Firestore');
       navigate('/dashboard'); // Redirect to dashboard after successful sign-up
     } catch (err) {
-      setError(err.message); // Display error message
+      setError(err.message);
       console.error('Error creating user:', err);
     } finally {
-      setLoading(false); // Set loading to false after completion
+      setLoading(false);
     }
   };
 
-  // Toggle password visibility
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
@@ -118,7 +126,7 @@ const SignUpPageContainer = styled.div`
   align-items: center;
   height: 100vh;
   color: #fff;
-`;
+;`
 
 const SignUpFormContainer = styled.div`
   background-color: rgba(0, 0, 0, 0.8);
@@ -133,8 +141,8 @@ const SignUpFormContainer = styled.div`
 
   &:hover {
     box-shadow: 0 0 20px 10px rgba(0, 223, 154, 0.9);
-  }
-`;
+  }`
+;
 
 const BackButton = styled.div`
   position: fixed;
@@ -152,8 +160,8 @@ const BackButton = styled.div`
 
   svg {
     margin-right: 8px;
-  }
-`;
+  }`
+;
 
 const Input = styled.input`
   width: 100%;
@@ -173,13 +181,13 @@ const Input = styled.input`
     outline: none;
     background-color: #555;
     box-shadow: 0 0 8px rgba(0, 223, 154, 0.7);
-  }
-`;
+  }`
+;
 
 const PasswordInputContainer = styled.div`
   position: relative;
-  width: 100%;
-`;
+  width: 100%;`
+;
 
 const PasswordInput = styled.input`
   width: 100%;
@@ -198,8 +206,8 @@ const PasswordInput = styled.input`
     outline: none;
     background-color: #555;
     box-shadow: 0 0 8px rgba(0, 223, 154, 0.7);
-  }
-`;
+  }`
+;
 
 const EyeIcon = styled.div`
   position: absolute;
@@ -211,8 +219,8 @@ const EyeIcon = styled.div`
 
   &:hover {
     color: #fff;
-  }
-`;
+  }`
+;
 
 const SignUpButton = styled.button`
   width: 106%;
@@ -252,12 +260,12 @@ const SignUpButton = styled.button`
     100% {
       transform: rotate(360deg);
     }
-  }
-`;
+  }`
+;
 
 const ErrorText = styled.p`
-  color: red;
-`;
+  color: red;`
+;
 
 const LoginLink = styled.p`
   color: #fff;
@@ -273,7 +281,7 @@ const LoginLink = styled.p`
     &:hover {
       text-decoration: underline;
     }
-  }
-`;
+  }`
+;
 
 export default SignUp;

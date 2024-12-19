@@ -43,6 +43,7 @@ const NavbarContainer = styled.div`
   padding: 1rem 2rem;
   background-color: #000;
   color: #fff;
+  height: 7%;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
   position: sticky;
   top: 0;

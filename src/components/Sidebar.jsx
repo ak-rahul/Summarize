@@ -41,9 +41,9 @@ const SidebarContainer = styled.div`
   align-items: center;
   background-color: #000;
   color: #fff;
-  width: 250px;
-  height: 100vh;
-  padding: 2rem 1rem;
+  width: 10%;
+  height: 100%;
+  padding: 1.5rem 0.8rem;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
   position: fixed;
   top: 0;
@@ -55,19 +55,19 @@ const SidebarButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 1rem;
+  gap: 0.8rem;
   width: 100%;
-  padding: 0.8rem 1.2rem;
-  margin: 0.5rem 0;
+  padding: 0.6rem 0.8rem;
+  margin: 0.4rem 0;
   background-color: transparent;
   border: none;
   color: #fff;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 6px;
   transition: all 0.3s ease;
 
   & span {
@@ -85,8 +85,8 @@ const SidebarButton = styled.button`
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 200%;
-    height: 200%;
+    width: 150%;
+    height: 150%;
     background: rgba(0, 223, 154, 0.2);
     border-radius: 50%;
     transform: translate(-50%, -50%);
@@ -107,3 +107,4 @@ const SidebarButton = styled.button`
 `;
 
 export default Sidebar;
+

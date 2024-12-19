@@ -1,5 +1,11 @@
 import { initializeApp, getApps } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithRedirect, signInWithEmailAndPassword as firebaseSignInWithEmailAndPassword } from 'firebase/auth';
+import { 
+  getAuth, 
+  GoogleAuthProvider, 
+  signInWithRedirect, 
+  signInWithEmailAndPassword as firebaseSignInWithEmailAndPassword 
+} from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -13,8 +19,11 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase (if it hasn't been initialized already)
+let app;
 if (!getApps().length) {
-  initializeApp(firebaseConfig);
+  app = initializeApp(firebaseConfig);
+} else {
+  app = getApps()[0];
 }
 
 // Firebase Authentication
@@ -39,5 +48,8 @@ const signInWithEmailAndPassword = async (email, password) => {
   }
 };
 
+// Firestore Database
+const db = getFirestore(app);
+
 // Exporting auth and methods for use in other files
-export { auth, signInWithGoogle, signInWithEmailAndPassword };
+export { auth, signInWithGoogle, signInWithEmailAndPassword, db };
