@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
-import Statistics from '../components/Statistics';
+import { Outlet } from 'react-router-dom';  // Import Outlet for rendering nested routes
 import styled from 'styled-components';
 
 export default function Dashboard() {
@@ -10,14 +10,14 @@ export default function Dashboard() {
       <Navbar />
       <Sidebar />
       <MainContent>
-        <Statistics />
+        {/* This is where the nested routes (like Profile) will be rendered */}
+        <Outlet />
       </MainContent>
     </DashboardContainer>
   );
 }
 
 // Styled Components
-
 const DashboardContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -31,4 +31,3 @@ const MainContent = styled.div`
   background-color: #f4f4f4;
   justify-content: right;
 `;
-

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FaHome, FaFileAlt, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import { FaHome, FaFileAlt, FaCog, FaSignOutAlt, FaUser } from 'react-icons/fa';  // Import FaUser for profile icon
 import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
@@ -24,6 +24,10 @@ const Sidebar = () => {
       <SidebarButton onClick={() => handleNavigate('/settings')}>
         <FaCog />
         <span>Settings</span>
+      </SidebarButton>
+      <SidebarButton onClick={() => handleNavigate('/dashboard/profile')}>
+        <FaUser />
+        <span>Profile</span>
       </SidebarButton>
       <SidebarButton onClick={() => handleNavigate('/logout')}>
         <FaSignOutAlt />
@@ -49,6 +53,7 @@ const SidebarContainer = styled.div`
   top: 0;
   left: 0;
   z-index: 1000;
+  border-right: 1px solid #00df9a;  /* Thinner green border */
 `;
 
 const SidebarButton = styled.button`
@@ -107,4 +112,3 @@ const SidebarButton = styled.button`
 `;
 
 export default Sidebar;
-

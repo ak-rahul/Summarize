@@ -4,7 +4,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../firebase/firebaseConfig";
 import { FaUser, FaEnvelope, FaCalendarAlt } from 'react-icons/fa';
 
-const Statistics = () => {
+const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -85,10 +85,12 @@ const StatisticsContainer = styled.div`
   color: #fff;
   width: 84%;
   box-shadow: 0 4px 10px rgba(0, 223, 154, 0.5);
-  border: 2px solid #00df9a;
-  max-height: 93%;  /* Set the maximum height */
+  border-top: 2px solid #00df9a;  /* Keep the top border */
+  border-left: 2px solid #00df9a;  /* Keep the left border */
+  height: 93%;  /* Set the maximum height */
   overflow-y: auto;  /* Allow vertical scrolling */
 `;
+
 
 const Title = styled.h2`
   text-align: center;
@@ -138,4 +140,4 @@ const ErrorText = styled.p`
   color: red;
 `;
 
-export default Statistics;
+export default Profile;
