@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { FaHome, FaFileAlt, FaCog, FaSignOutAlt, FaUser } from 'react-icons/fa';  // Import FaUser for profile icon
+import { FaHome, FaFileAlt, FaCog, FaSignOutAlt, FaUser } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import LogoutModal from './LogoutModal'; // Import the modal
 
 const Sidebar = () => {
+  const [isModalVisible, setModalVisible] = useState(false); // State to control the modal visibility
   const navigate = useNavigate();
 
   // Handle navigation
@@ -11,34 +13,48 @@ const Sidebar = () => {
     navigate(path);
   };
 
+  // Show the logout confirmation modal
+  const handleLogoutClick = () => {
+    setModalVisible(true);
+  };
+
+  // Close the logout modal
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   return (
-    <SidebarContainer>
-      <SidebarButton onClick={() => handleNavigate('/dashboard')}>
-        <FaHome />
-        <span>Dashboard</span>
-      </SidebarButton>
-      <SidebarButton onClick={() => handleNavigate('/reports')}>
-        <FaFileAlt />
-        <span>Reports</span>
-      </SidebarButton>
-      <SidebarButton onClick={() => handleNavigate('/settings')}>
-        <FaCog />
-        <span>Settings</span>
-      </SidebarButton>
-      <SidebarButton onClick={() => handleNavigate('/dashboard/profile')}>
-        <FaUser />
-        <span>Profile</span>
-      </SidebarButton>
-      <SidebarButton onClick={() => handleNavigate('/logout')}>
-        <FaSignOutAlt />
-        <span>Logout</span>
-      </SidebarButton>
-    </SidebarContainer>
+    <>
+      <SidebarContainer>
+        <SidebarButton onClick={() => handleNavigate('/dashboard')}>
+          <FaHome />
+          <span>Dashboard</span>
+        </SidebarButton>
+        <SidebarButton onClick={() => handleNavigate('/reports')}>
+          <FaFileAlt />
+          <span>Reports</span>
+        </SidebarButton>
+        <SidebarButton onClick={() => handleNavigate('/settings')}>
+          <FaCog />
+          <span>Settings</span>
+        </SidebarButton>
+        <SidebarButton onClick={() => handleNavigate('/dashboard/profile')}>
+          <FaUser />
+          <span>Profile</span>
+        </SidebarButton>
+        <SidebarButton onClick={handleLogoutClick}>
+          <FaSignOutAlt />
+          <span>Logout</span>
+        </SidebarButton>
+      </SidebarContainer>
+
+      {/* Render LogoutModal if it's visible */}
+      <LogoutModal isVisible={isModalVisible} onClose={closeModal} />
+    </>
   );
 };
 
 // Styled Components
-
 const SidebarContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -53,7 +69,7 @@ const SidebarContainer = styled.div`
   top: 0;
   left: 0;
   z-index: 1000;
-  border-right: 1px solid #00df9a;  /* Thinner green border */
+  border-right: 1px solid #00df9a;
 `;
 
 const SidebarButton = styled.button`
@@ -83,31 +99,6 @@ const SidebarButton = styled.button`
   &:hover {
     background-color: rgba(0, 223, 154, 0.1);
     color: #00df9a;
-  }
-
-  &:hover::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 150%;
-    height: 150%;
-    background: rgba(0, 223, 154, 0.2);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    animation: halo 1.2s infinite;
-    opacity: 0.8;
-  }
-
-  @keyframes halo {
-    0% {
-      transform: translate(-50%, -50%) scale(0.8);
-      opacity: 0.6;
-    }
-    100% {
-      transform: translate(-50%, -50%) scale(1.4);
-      opacity: 0;
-    }
   }
 `;
 
