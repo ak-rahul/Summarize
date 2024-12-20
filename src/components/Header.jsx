@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.jpeg'; // Your logo image
 
-const Header = ({ onAboutClick }) => {  // Accept onAboutClick prop
+const Header = ({ onHeroClick, onAboutClick }) => {
   const navigate = useNavigate();
 
   const handleLoginClick = () => {
@@ -18,10 +18,10 @@ const Header = ({ onAboutClick }) => {  // Accept onAboutClick prop
       <NavContainer>
         <NavLinksCenter>
           <NavLink>
-            <Button>Home</Button>
+            <Button onClick={onHeroClick}>Home</Button> {/* Scroll to Hero */}
           </NavLink>
           <NavLink>
-            <Button onClick={onAboutClick}>About</Button>  {/* Trigger scroll */}
+            <Button onClick={onAboutClick}>About</Button> {/* Scroll to About */}
           </NavLink>
           <NavLink>
             <Button>Contact</Button>
@@ -37,9 +37,7 @@ const Header = ({ onAboutClick }) => {  // Accept onAboutClick prop
 
 export default Header;
 
-// Styled Components (no change)
-
-const HeaderContainer = styled.header`
+const HeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;

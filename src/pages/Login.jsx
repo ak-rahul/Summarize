@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FaEye, FaEyeSlash, FaArrowLeft } from 'react-icons/fa';
-import { FcGoogle } from 'react-icons/fc';
-import { signInWithGoogle, signInWithEmailAndPassword } from '../firebase/firebaseConfig';
+import { signInWithEmailAndPassword } from '../firebase/firebaseConfig';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
@@ -12,16 +11,6 @@ const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  const handleGoogleLogin = async () => {
-    try {
-      await signInWithGoogle();
-      console.log('Google login successful');
-      navigate('/dashboard');
-    } catch (err) {
-      setError(err.message);
-    }
-  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -82,16 +71,6 @@ const Login = () => {
           </LoginButton>
         </form>
 
-        <OrContainer>
-          <hr />
-          <span>OR</span>
-          <hr />
-        </OrContainer>
-
-        <GoogleButton onClick={handleGoogleLogin}>
-          <FcGoogle /> Log in with Google
-        </GoogleButton>
-
         {error && <ErrorText>{error}</ErrorText>}
 
         <SignUpLink>
@@ -102,7 +81,7 @@ const Login = () => {
   );
 };
 
-// Styled Components
+// Styled Components (Unchanged)
 const greenHalo = `0 0 10px 5px rgba(0, 223, 154, 0.7)`;
 const greenHaloHover = `0 0 20px 10px rgba(0, 223, 154, 0.9)`;
 const greenHaloFocus = `0 0 8px rgba(0, 223, 154, 0.7)`;
@@ -235,61 +214,6 @@ const LoginButton = styled.button`
   &:disabled {
     background-color: #666;
     cursor: not-allowed;
-  }
-`;
-
-const OrContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 1rem 0;
-  width: 105%;
-
-  hr {
-    flex: 1;
-    border: none;
-    border-top: 1px solid #fff;
-    margin: 0 10px;
-    width: 100%;
-  }
-
-  span {
-    color: #fff;
-    font-size: 0.7rem;
-    font-weight: bold;
-  }
-`;
-
-const GoogleButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 106%;
-  padding: 0.8rem;
-  background-color: #fff;
-  color: #000;
-  border: none;
-  border-radius: 5px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 1rem;
-  transition: all 0.3s ease;
-
-  svg {
-    margin-right: 8px;
-    font-size: 1.5rem;
-  }
-
-  &:hover {
-    background-color: #f1f1f1;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    transform: translateY(-5px);
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
   }
 `;
 

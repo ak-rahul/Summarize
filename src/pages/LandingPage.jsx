@@ -5,24 +5,26 @@ import About from '../components/About';
 import styled from 'styled-components';
 import Scrollbars from 'react-custom-scrollbars-2';
 
-
 const LandingPage = () => {
-  const aboutRef = useRef(null); // Create a ref for About component
+  const heroRef = useRef(null); // Ref for Hero section
+  const aboutRef = useRef(null); // Ref for About section
 
-  // Function to handle the scroll to About section
-  const scrollToAbout = () => {
-    if (aboutRef.current) {
-      aboutRef.current.scrollIntoView({ behavior: 'smooth' });
+  // Function to handle scrolling to a section
+  const scrollToSection = (section) => {
+    if (section && section.current) {
+      section.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
-  
 
   return (
     <Scrollbars style={{ width: '100%', height: '100%' }} autoHide>
       <LandingPageContainer>
-        <Header onAboutClick={scrollToAbout} />  {/* Pass scroll function to Header */}
-        <Hero />
-        <About ref={aboutRef} />  {/* Pass ref to About component */}
+        <Header 
+          onHeroClick={() => scrollToSection(heroRef)} // Pass Hero scroll function
+          onAboutClick={() => scrollToSection(aboutRef)} // Pass About scroll function
+        />
+        <Hero ref={heroRef} /> {/* Attach Hero ref */}
+        <About ref={aboutRef} /> {/* Attach About ref */}
       </LandingPageContainer>
     </Scrollbars>
   );
@@ -36,7 +38,6 @@ const LandingPageContainer = styled.div`
   flex-direction: column;
   background-color: black;
   overflow-x: hidden;
-  
 `;
 
 export default LandingPage;

@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { ReactTyped } from 'react-typed';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
-const Hero = () => {
+const Hero = forwardRef((props, ref) => { // Forward the ref
+  const navigate = useNavigate();
+
+  const handleGetStarted = () => {
+    navigate('/login'); // Navigate to the login page
+  };
+
   return (
-    <PageContainer>
+    <PageContainer ref={ref}> {/* Attach ref to the container */}
       <HeroContent>
         <MottoText>Welcome to the Summarizer App</MottoText>
         <SubText>
@@ -15,18 +22,18 @@ const Hero = () => {
             loop
           />
         </SubText>
-        <GetStartedButton>Get Started</GetStartedButton>
+        <GetStartedButton onClick={handleGetStarted}>Get Started</GetStartedButton>
       </HeroContent>
     </PageContainer>
   );
-};
+});
 
 const PageContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 42vh;
-  margin-bottom: 40vh;
+  margin-bottom: 10vh;
   background-color: #000; /* Full page black background */
 `;
 
@@ -35,7 +42,7 @@ const HeroContent = styled.div`
   width: 92vw;
   height: 40vh;
   padding: 10px;
-  margin-top : 20%;
+  margin-top: 20%;
   box-shadow: 0 0 10px 5px rgba(0, 223, 154, 0.7); /* Green halo around the box */
   border-radius: 10px;
   background-color: rgba(0, 0, 0, 0.3); /* Transparent black background */
