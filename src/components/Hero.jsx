@@ -3,11 +3,11 @@ import { ReactTyped } from 'react-typed';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-const Hero = forwardRef((props, ref) => { // Forward the ref
+const Hero = forwardRef((props, ref) => { 
   const navigate = useNavigate();
-
+  
   const handleGetStarted = () => {
-    navigate('/login'); // Navigate to the login page
+    navigate('/login');
   };
 
   return (
